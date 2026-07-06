@@ -1,0 +1,35 @@
+class Solution:
+    def uniquePathsIII(self, grid: List[List[int]]) -> int:
+        path = 0
+        def solve(x,y,c):
+            nonlocal path
+            if not 0<=x<m or not 0<=y<n or grid[x][y]== -1 or vis[x][y]:
+                return False
+            if grid[x][y] == 2 and c == noPath:
+                path += 1
+            vis[x][y] = 1
+            if solve(x,y+1,c+1):
+                return True
+            if solve(x+1,y,c+1):
+                return True
+            if solve(x,y-1,c+1):
+                return True
+            if solve(x-1,y,c+1):
+                return True
+            vis[x][y] = 0
+            return False
+        m = len(grid)
+        n = len(grid[0])
+        vis = [[0]*n for _ in range(m)]
+        startx = 0 
+        starty = 0
+        noPath = 0
+        for i in range(m):
+            for j in range(n):
+                if grid[i][j] == 1:
+                    startx = i
+                    starty = j
+                if grid[i][j] != -1:
+                    noPath+=1
+        solve(startx,starty,1)
+        return path
